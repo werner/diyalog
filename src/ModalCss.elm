@@ -9,6 +9,7 @@ type CssClasses
     | HideModalCss
     | ModalContent
     | ModalHeader
+    | ModalHeaderTitle
     | ModalBody
     | ModalFooter
     | CloseCss
@@ -38,7 +39,7 @@ css =
           , margin auto
           , padding (px 0)
           , border3 (px 1) solid (hex "888")
-          , width (pct 80)
+          , width (pct 50)
           , boxShadow5 (px 0) (px 4) (px 8) (px 0) (rgba 0 0 0 0.2)
           , boxShadow5 (px 0) (px 6) (px 20) (px 0) (rgba 0 0 0 0.19)
           ]
@@ -47,6 +48,8 @@ css =
           , float right
           , fontSize (px 28)
           , fontWeight bold
+          , border2 (px 1) none
+          , backgroundColor (hex "fff")
           , hover [ color (hex "000")
                   , textDecoration none
                   , cursor pointer ] 
@@ -56,15 +59,23 @@ css =
           ]
     , (.) ModalHeader
           [ padding2 (px 2) (px 16)
-          , backgroundColor (hex "5cb85c")
-          , color (hex "fff") 
+          , backgroundColor (hex "fff")
+          , color (hex "000") 
+          , height (px 40)
+          , borderBottom2 (px 1) groove
+          , cursor move
           ]
+    , (.) ModalHeaderTitle
+          [ fontSize (px 24)
+          , fontWeight bold
+          , paddingTop (px 5) ]
     , (.) ModalBody
           [ padding2 (px 2) (px 16) ]
     , (.) ModalFooter
           [ padding2 (px 2) (px 16)
           , backgroundColor (hex "5cb85c")
           , color (hex "fff")
+          , height (px 40)
           ]
     ]
 
