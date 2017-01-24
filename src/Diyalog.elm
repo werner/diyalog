@@ -2,13 +2,13 @@ module Diyalog exposing (..)
 
 import Html exposing (..)
 import Html.Attributes as Attr exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (on, onClick, targetValue)
 import Html.CssHelpers exposing (withNamespace)
 
 import ModalCss exposing (..)
 
 { id, class, classList } =
-    Html.CssHelpers.withNamespace "modal"
+    Html.CssHelpers.withNamespace ""
 
 type Msg = OkModal
          | HideModal
@@ -20,14 +20,22 @@ view model =
     div [] [ button [ Attr.id "myBtn"
                     , onClick OkModal ]
                     [ text "Open Modal" ]
-           , div [ Attr.id "myModal" 
-                 , onClick HideModal
+           , div [ id DiyalogModal 
                  , class [ model.visibility ] ]
-                 [ div [ class [ ModalContent ] ]
-                       [ button [ class [ CloseCss ] 
-                                , onClick HideModal  ] 
-                                [ text "&times;" ]
-                       , p [] [ text "My Modal" ] 
+                 [ div [ class [ ModalBackground]
+                       , onClick HideModal ] []
+                 , div [ class [ ModalContent ] ]
+                       [ div [ class [ ModalHeader ] ]
+                           [ button [ class [ CloseCss ] 
+                                        , onClick HideModal ] 
+                                        [ text "x" ]
+                           , h2 [] [ text "Modal Header" ] 
+                           ]
+                       , div [ class [ ModalBody ] ]
+                             [ p [] [ text "Some Modal Body"] 
+                             , p [] [ text "Some other Modal Body"] ] 
+                       , div [ class [ ModalFooter ] ]
+                             [ h3 [] [ text "Modal Footer"] ]
                        ]
                  ]
            ]
@@ -43,6 +51,7 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model = Sub.none
 
+main : Program Never Model Msg
 main =
     program
         {
@@ -51,4 +60,3 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
-      
