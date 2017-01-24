@@ -45,6 +45,7 @@ css =
           ]
     ]
 
+basicCss : Mixin
 basicCss = 
     mixin
         [ position fixed

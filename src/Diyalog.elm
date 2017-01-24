@@ -15,6 +15,7 @@ type Msg = OkModal
 
 type alias Model = { visibility : CssClasses }
 
+view : Model -> Html Msg
 view model = 
     div [] [ button [ Attr.id "myBtn"
                     , onClick OkModal ]
@@ -31,18 +32,23 @@ view model =
                  ]
            ]
 
+update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
         OkModal ->
-            { model | visibility = ShowModalCss }
+            ( { model | visibility = ShowModalCss }, Cmd.none )
         HideModal ->
-            { model | visibility = HideModalCss }
+            ( { model | visibility = HideModalCss }, Cmd.none )
+
+subscriptions : Model -> Sub Msg
+subscriptions model = Sub.none
 
 main =
-    beginnerProgram
+    program
         {
-          model = { visibility = HideModalCss }
+          init = ( { visibility = HideModalCss }, Cmd.none )
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
       
