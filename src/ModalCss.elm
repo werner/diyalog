@@ -30,8 +30,8 @@ css =
           , zIndex -1
           , width (pct 100)
           , height (pct 100)
-          , backgroundColor (rgb 0 0 0)
-          , backgroundColor (rgba 0 0 0 0.4) 
+          , backgroundColor (hex "fff")
+          , opacity (num 0.6)
           ]
     , (.) ModalContent
           [ position relative
@@ -46,7 +46,7 @@ css =
     , (.) CloseCss
           [ color (hex "aaa")
           , float right
-          , fontSize (px 28)
+          , fontSize (px 20)
           , fontWeight bold
           , border2 (px 1) none
           , backgroundColor (hex "fff")
@@ -63,10 +63,9 @@ css =
           , color (hex "000") 
           , height (px 40)
           , borderBottom2 (px 1) groove
-          , cursor move
           ]
     , (.) ModalHeaderTitle
-          [ fontSize (px 24)
+          [ fontSize (px 20)
           , fontWeight bold
           , paddingTop (px 5) ]
     , (.) ModalBody
@@ -83,6 +82,7 @@ basicCss : Mixin
 basicCss = 
     mixin
         [ position fixed
+        , fontFamilies ["Helvetica"]
         , zIndex 1
         , left (px 0)
         , top (px 0)
