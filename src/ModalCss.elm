@@ -14,6 +14,8 @@ type CssClasses
     | ModalFooter
     | CloseCss
 
+type Animations = AnimateTop
+
 css : Stylesheet
 css = 
     stylesheet
@@ -42,6 +44,8 @@ css =
           , width (pct 50)
           , boxShadow5 (px 0) (px 4) (px 8) (px 0) (rgba 0 0 0 0.2)
           , boxShadow5 (px 0) (px 6) (px 20) (px 0) (rgba 0 0 0 0.19)
+          , animationName AnimateTop
+          , animationDuration 0.4
           ]
     , (.) CloseCss
           [ color (hex "aaa")
@@ -94,3 +98,21 @@ basicCss =
 zIndex : Int -> Mixin
 zIndex i =
     property "z-index" <| toString i
+
+animationName : Animations -> Mixin
+animationName animation =
+    let params = String.toLower <| toString animation
+    in
+        mixin
+          [ property "animation-name" <| params
+          , property "-webkit-animation-name" <| params 
+          , property "-moz-animation-name" <| params ]
+
+animationDuration : Float -> Mixin
+animationDuration num =
+    let params = toString num ++ "s"
+    in
+        mixin
+          [ property "animation-duration" <| params
+          , property "-webkit-animation-duration" <| params
+          , property "-moz-animation-duration" <| params ]
