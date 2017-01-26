@@ -1,41 +1,40 @@
 module Diyalog exposing (..)
 
 import Html exposing (..)
-import Html.Attributes as Attr exposing (..)
+import Html.Attributes exposing (..)
 import Html.Events exposing (on, onClick, targetValue)
-import Html.CssHelpers exposing (withNamespace)
 
-import ModalCss exposing (..)
-
-{ id, class, classList } =
-    Html.CssHelpers.withNamespace ""
+import Styles exposing (..)
 
 type Msg = OkModal
-         | HideModal
+         | CloseModal
 
-type alias Model = { visibility : CssClasses }
+type ModalVisibility = ShowModal
+                     | HideModal
+
+type alias Model = { visibility : ModalVisibility }
 
 view : Model -> Html Msg
 view model = 
-    div [] [ button [ Attr.id "myBtn"
+    div [] [ button [ id "my-btn"
                     , onClick OkModal ]
                     [ text "Open Modal" ]
-           , div [ id DiyalogModal 
-                 , class [ model.visibility ] ]
-                 [ div [ class [ ModalBackground]
-                       , onClick HideModal ] []
-                 , div [ class [ ModalContent ] ]
-                       [ div [ class [ ModalHeader ] ]
-                           [ button [ class [ CloseCss ] 
-                                        , onClick HideModal ] 
-                                        [ text "x" ]
-                           , div [ class [ ModalHeaderTitle ] ] 
+           , div [ id "diyalog-modal" 
+                 , modalVisibility model.visibility ]
+                 [ div [ modalBackground
+                       , onClick CloseModal ] []
+                 , div [ modalContent ]
+                       [ div [ modalHeader ]
+                           [ button [ closeCss 
+                                    , onClick CloseModal ] 
+                                    [ text "x" ]
+                           , div [ modalHeaderTitle ] 
                                  [ text "Modal Header" ] 
                            ]
-                       , div [ class [ ModalBody ] ]
+                       , div [ modalBody ]
                              [ p [] [ text "Some Modal Body"] 
                              , p [] [ text "Some other Modal Body"] ] 
-                       , div [ class [ ModalFooter ] ]
+                       , div [ modalFooter ]
                              [ h3 [] [ text "Modal Footer"] ]
                        ]
                  ]
@@ -45,9 +44,9 @@ update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
         OkModal ->
-            ( { model | visibility = ShowModalCss }, Cmd.none )
-        HideModal ->
-            ( { model | visibility = HideModalCss }, Cmd.none )
+            ( { model | visibility = ShowModal }, Cmd.none )
+        CloseModal ->
+            ( { model | visibility = HideModal }, Cmd.none )
 
 subscriptions : Model -> Sub Msg
 subscriptions model = Sub.none
@@ -56,8 +55,16 @@ main : Program Never Model Msg
 main =
     program
         {
-          init = ( { visibility = HideModalCss }, Cmd.none )
+          init = ( { visibility = HideModal }, Cmd.none )
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
+
+modalVisibility : ModalVisibility -> Attribute msg
+modalVisibility visibility =
+    case visibility of
+        ShowModal ->
+            modalShow
+        HideModal ->
+            modalHide
