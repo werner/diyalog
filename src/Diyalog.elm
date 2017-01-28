@@ -7,14 +7,8 @@ import Html.Events exposing (on, onClick, targetValue)
 import Animation exposing (px)
 
 import Styles exposing (..)
-
-type Msg = ShowingModal
-         | OkModal (Cmd Msg)
-         | CloseModal
-         | Animate Animation.Msg
-
-type ModalVisibility = ShowModal
-                     | HideModal
+import Utils  exposing (..)
+import Message exposing (..)
 
 type alias Model = { style       : Animation.State
                    , body        : Html Msg
@@ -98,38 +92,3 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
-
-modalVisibility : ModalVisibility -> Attribute msg
-modalVisibility visibility =
-    case visibility of
-        ShowModal ->
-            modalShow
-        HideModal ->
-            modalHide
-
-setFullHeader : String -> Html Msg
-setFullHeader header = 
-    div [ modalHeader ]
-        [ button [ closeCss 
-                 , onClick CloseModal ] 
-                 [ text "x" ]
-         , div [ modalHeaderTitle ] 
-               [ text header ] 
-         ]
-
-setFullBody : Html Msg -> Html Msg
-setFullBody body =
-    div [ modalBody ]
-        [ body ]
-
-setFullFooter : Html Msg
-setFullFooter = 
-    div [ modalFooter ]
-        [ div [ actionsGroup ]
-              [ button [ footerButtonClose
-                       , onClick CloseModal ]
-                       [ text "Close" ]
-              , button [ footerButtonOk 
-                       , onClick <| OkModal Cmd.none ] 
-                       [ text "Ok" ] ]
-        ]
