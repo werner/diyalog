@@ -78,9 +78,10 @@ modalFooter : Attribute msg
 modalFooter = 
     style
       [ ("padding", "2px 16px") 
-      , ("background-color", "#5cb85c")
-      , ("color", "#fff")
-      , ("height", "40px") ]
+      , ("background-color", "#fff")
+      , ("color", "#000")
+      , ("height", "40px")
+      , ("border-top", "1px groove") ]
 
 closeCss : Attribute msg
 closeCss = 
@@ -92,3 +93,36 @@ closeCss =
       , ("border", "1px none")
       , ("background-color", "#fff")
       , ("cursor", "pointer") ]
+
+footerButtonClose : Attribute msg
+footerButtonClose =
+    style <|
+      [ ("background-image", "none")
+      , ("color", "#d9534f")
+      , ("background-color", "transparent")
+      , ("border-color", "#d9534f") ] ++ basicButton
+
+footerButtonOk : Attribute msg
+footerButtonOk =
+    style <|
+      [ ("background-image", "none")
+      , ("color", "#5cb85c")
+      , ("background-color", "transparent")
+      , ("border-color", "#5cb85c") ] ++ basicButton
+
+basicButton : List ( String, String )
+basicButton = [ ("display", "inline-block")
+              , ("text-align", "center") 
+              , ("white-space", "nowrap")
+              , ("vertical-align", "middle")
+              , ("border", "1px solid")
+              , ("padding", "0.5rem 1rem")
+              , ("border-radius", "0.25rem")
+              , ("cursor", "pointer")
+              , ("margin-left", "10px")
+              , ("transition", "all .2s ease-in-out")]
+
+actionsGroup : Attribute msg
+actionsGroup =
+    style
+      [ ("float", "right") ]

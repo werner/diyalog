@@ -8,7 +8,8 @@ import Animation exposing (px)
 
 import Styles exposing (..)
 
-type Msg = OkModal
+type Msg = ShowingModal
+         | OkModal (Cmd Msg)
          | CloseModal
          | Animate Animation.Msg
 
@@ -16,12 +17,13 @@ type ModalVisibility = ShowModal
                      | HideModal
 
 type alias Model = { style      : Animation.State
+                   , body       : Html Msg
                    , visibility : ModalVisibility }
 
 view : Model -> Html Msg
 view model = 
     div [] [ button [ id "my-btn"
-                    , onClick OkModal ]
+                    , onClick ShowingModal ]
                     [ text "Open Modal" ]
            , div [ id "diyalog-modal"
                  , modalVisibility model.visibility ]
@@ -39,10 +41,16 @@ view model =
                                  [ text "Modal Header" ] 
                            ]
                        , div [ modalBody ]
-                             [ p [] [ text "Some Modal Body"] 
-                             , p [] [ text "Some other Modal Body"] ] 
+                             [ model.body ]
                        , div [ modalFooter ]
-                             [ h3 [] [ text "Modal Footer"] ]
+                             [ div [ actionsGroup ]
+                                   [ button [ footerButtonClose
+                                            , onClick CloseModal ]
+                                            [ text "Close" ]
+                                   , button [ footerButtonOk 
+                                            , onClick <| OkModal Cmd.none ] 
+                                            [ text "Ok" ] ]
+                                   ]
                        ]
                  ]
            ]
@@ -51,7 +59,7 @@ view model =
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
-        OkModal ->
+        ShowingModal ->
             ( { model | style =
                             Animation.interrupt
                                 [ Animation.to 
@@ -70,8 +78,15 @@ update msg model =
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
                       , visibility = HideModal }, Cmd.none )
+
         Animate animMsg ->
             ( { model | style = Animation.update animMsg model.style }, Cmd.none )
+
+        OkModal command ->
+            ( { model | style = Animation.style
+                                [ Animation.top (px -50.0)
+                                , Animation.opacity 0.0 ]
+                      , visibility = HideModal }, command )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -84,6 +99,7 @@ main =
           init = ( { style = Animation.style
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
+                   , body = text ""
                    , visibility = HideModal }, Cmd.none )
         , view = view
         , update = update
