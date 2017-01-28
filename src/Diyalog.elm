@@ -16,9 +16,13 @@ type Msg = ShowingModal
 type ModalVisibility = ShowModal
                      | HideModal
 
-type alias Model = { style      : Animation.State
-                   , body       : Html Msg
-                   , visibility : ModalVisibility }
+type alias Model = { style       : Animation.State
+                   , body        : Html Msg
+                   , headerTitle : String
+                   , fullHeader  : (String -> Html Msg)
+                   , fullBody    : (Html Msg -> Html Msg)
+                   , fullFooter  : Html Msg
+                   , visibility  : ModalVisibility }
 
 view : Model -> Html Msg
 view model = 
@@ -33,24 +37,9 @@ view model =
                                     [ modalContent
                                     , id "modal-content" ]
                        )
-                       [ div [ modalHeader ]
-                           [ button [ closeCss 
-                                    , onClick CloseModal ] 
-                                    [ text "x" ]
-                           , div [ modalHeaderTitle ] 
-                                 [ text "Modal Header" ] 
-                           ]
-                       , div [ modalBody ]
-                             [ model.body ]
-                       , div [ modalFooter ]
-                             [ div [ actionsGroup ]
-                                   [ button [ footerButtonClose
-                                            , onClick CloseModal ]
-                                            [ text "Close" ]
-                                   , button [ footerButtonOk 
-                                            , onClick <| OkModal Cmd.none ] 
-                                            [ text "Ok" ] ]
-                                   ]
+                       [ model.fullHeader model.headerTitle
+                       , model.fullBody   model.body
+                       , model.fullFooter
                        ]
                  ]
            ]
@@ -99,8 +88,12 @@ main =
           init = ( { style = Animation.style
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
-                   , body = text ""
-                   , visibility = HideModal }, Cmd.none )
+                   , body        = text ""
+                   , headerTitle = ""
+                   , fullHeader  = setFullHeader
+                   , fullBody    = setFullBody
+                   , fullFooter  = setFullFooter
+                   , visibility  = HideModal }, Cmd.none )
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -113,3 +106,30 @@ modalVisibility visibility =
             modalShow
         HideModal ->
             modalHide
+
+setFullHeader : String -> Html Msg
+setFullHeader header = 
+    div [ modalHeader ]
+        [ button [ closeCss 
+                 , onClick CloseModal ] 
+                 [ text "x" ]
+         , div [ modalHeaderTitle ] 
+               [ text header ] 
+         ]
+
+setFullBody : Html Msg -> Html Msg
+setFullBody body =
+    div [ modalBody ]
+        [ body ]
+
+setFullFooter : Html Msg
+setFullFooter = 
+    div [ modalFooter ]
+        [ div [ actionsGroup ]
+              [ button [ footerButtonClose
+                       , onClick CloseModal ]
+                       [ text "Close" ]
+              , button [ footerButtonOk 
+                       , onClick <| OkModal Cmd.none ] 
+                       [ text "Ok" ] ]
+        ]
