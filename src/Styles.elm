@@ -8,7 +8,6 @@ basicCss = [ ("position", "fixed")
            , ("font-family", "Helvetica")
            , ("z-index", "1")
            , ("left", "0px")
-           , ("top", "0px")
            , ("width", "100%")
            , ("height", "100%")
            , ("overlow", "auto") ]
@@ -30,10 +29,12 @@ modalBackground =
     style
       [ ("position", "fixed") 
       , ("z-index", "-1")
+      , ("top", "0px")
       , ("width", "100%")
       , ("height", "100%")
       , ("background-color", "#fff")
-      , ("opacity", "0.6")]
+      , ("opacity", "0.6")
+      ]
 
 modalContent : Attribute msg
 modalContent = 
