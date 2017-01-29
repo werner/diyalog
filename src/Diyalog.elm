@@ -45,11 +45,12 @@ type alias Model = { style           : Animation.State
 {-| -}
 view : Model -> Html Msg
 view model = 
-    div [ id "diyalog-modal"
-        , modalVisibility model.visibility ]
+    div [ modalVisibility model.visibility ]
         [ div [ modalBackground
               , onClick CloseModal ] []
-        , div ( Animation.render model.style ++ [ model.mainModalCss ])
+        , div ( Animation.render model.style ++ [ model.mainModalCss
+                                                , style [("display", "block")]
+                                                , id "diyalog-modal" ])
               [ div [ model.modalContentCss
                     , id "modal-content" ]
                     [ model.fullHeader model.headerTitle

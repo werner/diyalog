@@ -1,3 +1,5 @@
 elm-stuff/
 styles.css
 main.js
+examples/*.js
+examples/*.html

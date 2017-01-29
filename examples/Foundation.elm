@@ -1,4 +1,4 @@
-module Bootstrap exposing (..)
+module Foundation exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -14,13 +14,10 @@ type alias Model = { modal : Diyalog.Model, numberRandom : Int }
 
 view : Model -> Html Msg
 view model = 
-    div [] [ node "link"
-                  [ href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-                  , rel "stylesheet"
-                  ]
-                  []
-           , button [ id "my-btn"
-                    , onClick <| DiyalogMsg Diyalog.Message.ShowingModal ]
+    div [] [ button [ id "my-btn"
+                    , class "success button"
+                    , onClick <| DiyalogMsg Diyalog.Message.ShowingModal 
+                    , attribute "data-open" "diyalog-modal"]
                     [ text "Open Modal" ]
            , p [] []
            , div [] [ text <| "Mi number:" ++ toString model.numberRandom ]
@@ -51,8 +48,8 @@ subscriptions model =
 initial : Model
 initial = let initialModal = Diyalog.initial
           in { modal = { initialModal | fullHeader = setFullHeader
-                                      , headerTitle =  "My awesome Bootstrap modal"
-                                      , mainModalCss = class "modal-dialog"
+                                      , headerTitle =  "My awesome Foundation modal"
+                                      , mainModalCss = class "reveal"
                                       , modalContentCss = class "modal-content"
                                       , fullBody = setFullBody
                                       , fullFooter = setFullFooter
@@ -71,8 +68,9 @@ main =
 
 setFullHeader : String -> Html Diyalog.Message.Msg
 setFullHeader header = 
-    div [ class "modal-header" ]
-        [ button [ class "close"
+    div [ class "lead" ]
+        [ button [ class "close-button"
+                 , style [("font-size", "24px")]
                  , onClick CloseModal ] 
                  [ text "x" ]
         , div [ class "modal-title" ] 
@@ -86,10 +84,10 @@ setFullBody body =
 
 setFullFooter : Html Diyalog.Message.Msg
 setFullFooter = 
-    div [ class "modal-footer" ]
-        [ button [ class "btn btn-default"
+    div [ class "button-group" ]
+        [ button [ class "button"
                  , onClick CloseModal ]
                  [ text "Close" ]
-        , button [ class "btn btn-primary" 
+        , button [ class "button success" 
                  , onClick OkModal ] 
                  [ text "Ok" ] ]
