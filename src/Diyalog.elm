@@ -1,4 +1,23 @@
-module Diyalog exposing (..)
+module Diyalog exposing (Model, view, update, initial, subscriptions)
+
+{-| A Dialog for Elm
+
+# The model
+@docs Model
+
+# The view
+@docs view
+
+# The update
+@docs update
+
+# The subscriptions
+@docs subscriptions
+
+# The initial state
+@docs initial
+
+-}
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -8,8 +27,11 @@ import Animation exposing (px)
 
 import Styles exposing (..)
 import Utils  exposing (..)
-import Message exposing (..)
+import Diyalog.Message exposing (..)
 
+{-| Set up the model with style as the animation for the modal show up,
+    body as the modal body, headerTitle just the title, fullHeader is the complete header with css
+    fullBody is the whole body with css and the body, fullFooter should include the buttons with the actions -}
 type alias Model = { style       : Animation.State
                    , body        : Html Msg
                    , headerTitle : String
@@ -18,27 +40,24 @@ type alias Model = { style       : Animation.State
                    , fullFooter  : Html Msg
                    , visibility  : ModalVisibility }
 
+{-| -}
 view : Model -> Html Msg
 view model = 
-    div [] [ button [ id "my-btn"
-                    , onClick ShowingModal ]
-                    [ text "Open Modal" ]
-           , div [ id "diyalog-modal"
-                 , modalVisibility model.visibility ]
-                 [ div [ modalBackground
-                       , onClick CloseModal ] []
-                 , div ( Animation.render model.style ++ 
-                                    [ modalContent
-                                    , id "modal-content" ]
-                       )
-                       [ model.fullHeader model.headerTitle
-                       , model.fullBody   model.body
-                       , model.fullFooter
-                       ]
-                 ]
-           ]
+    div [ id "diyalog-modal"
+        , modalVisibility model.visibility ]
+        [ div [ modalBackground
+              , onClick CloseModal ] []
+        , div ( Animation.render model.style ++ 
+                           [ modalContent
+                           , id "modal-content" ]
+              )
+              [ model.fullHeader model.headerTitle
+              , model.fullBody   model.body
+              , model.fullFooter
+              ]
+        ]
 
-
+{-| -}
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
@@ -65,30 +84,25 @@ update msg model =
         Animate animMsg ->
             ( { model | style = Animation.update animMsg model.style }, Cmd.none )
 
-        OkModal command ->
+        OkModal ->
             ( { model | style = Animation.style
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
-                      , visibility = HideModal }, command )
+                      , visibility = HideModal }, Cmd.none )
 
+{-| -}
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Animation.subscription Animate [ model.style ]
 
-main : Program Never Model Msg
-main =
-    program
-        {
-          init = ( { style = Animation.style
+{-| -}
+initial : Model
+initial = { style = Animation.style
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
-                   , body        = text ""
-                   , headerTitle = ""
-                   , fullHeader  = setFullHeader
-                   , fullBody    = setFullBody
-                   , fullFooter  = setFullFooter
-                   , visibility  = HideModal }, Cmd.none )
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
-        }
+          , body        = text ""
+          , headerTitle = ""
+          , fullHeader  = setFullHeader
+          , fullBody    = setFullBody
+          , fullFooter  = setFullFooter
+          , visibility  = HideModal }

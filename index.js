@@ -1,3 +1,3 @@
 var node = document.getElementById('main');
-var app = Elm.Diyalog.embed(node);
+var app = Elm.Basic.embed(node);
 

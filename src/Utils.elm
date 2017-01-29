@@ -3,7 +3,7 @@ module Utils exposing (..)
 import Html exposing (..)
 import Html.Events exposing (on, onClick, targetValue)
 
-import Message exposing (..)
+import Diyalog.Message exposing (..)
 import Styles  exposing (..)
 
 type ModalVisibility = ShowModal
@@ -40,6 +40,6 @@ setFullFooter =
                        , onClick CloseModal ]
                        [ text "Close" ]
               , button [ footerButtonOk 
-                       , onClick <| OkModal Cmd.none ] 
+                       , onClick OkModal ] 
                        [ text "Ok" ] ]
         ]
