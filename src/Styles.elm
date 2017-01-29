@@ -36,15 +36,18 @@ modalBackground =
       , ("opacity", "0.6")
       ]
 
+mainModalCss : Attribute msg
+mainModalCss = 
+    style [ ("width", "50%") 
+          , ("position", "relative") 
+          , ("margin", "auto")
+          , ("padding", "0px") ]
+
 modalContent : Attribute msg
 modalContent = 
     style
-      [ ("position", "relative")
-      , ("background-color", "#fefefe")
-      , ("margin", "auto")
-      , ("padding", "0px")
+      [ ("background-color", "#fefefe")
       , ("border", "1px solid #888")
-      , ("width", "50%")
       , ("box-shadow", "0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)")
       , ("-webkit-animation-name", "animatetop")
       , ("-webkit-animation-duration", "0.4s")

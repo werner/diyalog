@@ -108,5 +108,5 @@ initial = { style = Animation.style
           , fullBody        = setFullBody
           , fullFooter      = setFullFooter
           , modalContentCss = modalContent
-          , mainModalCss    = style []
+          , mainModalCss    = mainModalCss
           , visibility      = HideModal }
