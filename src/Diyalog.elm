@@ -32,13 +32,15 @@ import Diyalog.Message exposing (..)
 {-| Set up the model with style as the animation for the modal show up,
     body as the modal body, headerTitle just the title, fullHeader is the complete header with css
     fullBody is the whole body with css and the body, fullFooter should include the buttons with the actions -}
-type alias Model = { style       : Animation.State
-                   , body        : Html Msg
-                   , headerTitle : String
-                   , fullHeader  : (String -> Html Msg)
-                   , fullBody    : (Html Msg -> Html Msg)
-                   , fullFooter  : Html Msg
-                   , visibility  : ModalVisibility }
+type alias Model = { style           : Animation.State
+                   , mainModalCss    : Attribute Msg
+                   , modalContentCss : Attribute Msg
+                   , body            : Html Msg
+                   , headerTitle     : String
+                   , fullHeader      : (String -> Html Msg)
+                   , fullBody        : (Html Msg -> Html Msg)
+                   , fullFooter      : Html Msg
+                   , visibility      : ModalVisibility }
 
 {-| -}
 view : Model -> Html Msg
@@ -47,13 +49,13 @@ view model =
         , modalVisibility model.visibility ]
         [ div [ modalBackground
               , onClick CloseModal ] []
-        , div ( Animation.render model.style ++ 
-                           [ modalContent
-                           , id "modal-content" ]
-              )
-              [ model.fullHeader model.headerTitle
-              , model.fullBody   model.body
-              , model.fullFooter
+        , div ( Animation.render model.style ++ [ model.mainModalCss ])
+              [ div [ model.modalContentCss
+                    , id "modal-content" ]
+                    [ model.fullHeader model.headerTitle
+                    , model.fullBody   model.body
+                    , model.fullFooter
+                    ]
               ]
         ]
 
@@ -100,9 +102,11 @@ initial : Model
 initial = { style = Animation.style
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
-          , body        = text ""
-          , headerTitle = ""
-          , fullHeader  = setFullHeader
-          , fullBody    = setFullBody
-          , fullFooter  = setFullFooter
-          , visibility  = HideModal }
+          , body            = text ""
+          , headerTitle     = ""
+          , fullHeader      = setFullHeader
+          , fullBody        = setFullBody
+          , fullFooter      = setFullFooter
+          , modalContentCss = modalContent
+          , mainModalCss    = style []
+          , visibility      = HideModal }
