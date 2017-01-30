@@ -29,9 +29,10 @@ import Styles exposing (..)
 import Utils  exposing (..)
 import Diyalog.Message exposing (..)
 
-{-| Set up the model with style as the animation for the modal show up,
-    body as the modal body, headerTitle just the title, fullHeader is the complete header with css
-    fullBody is the whole body with css and the body, fullFooter should include the buttons with the actions -}
+{-| Set up the model with style as the animation for the modal to show up, uses a pretty basic animation.
+    The body property is the modal body, headerTitle just the title, fullHeader is the complete header with css
+    fullBody is the whole body with css and the body, fullFooter should include the buttons with the actions.
+    You don't need to modify visibility -}
 type alias Model = { style           : Animation.State
                    , mainModalCss    : Attribute Msg
                    , modalContentCss : Attribute Msg

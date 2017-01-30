@@ -1,8 +1,8 @@
 {
     "version": "1.0.0",
-    "summary": "Elm dialog",
+    "summary": "An extensible Elm dialog modal",
     "repository": "https://github.com/werner/diyalog.git",
-    "license": "BSD3",
+    "license": "MIT",
     "source-directories": [
         "src"
     ],
