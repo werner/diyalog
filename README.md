@@ -4,6 +4,12 @@
 
 All examples are included in examples folder
 
+## Instalation
+
+```
+elm package install werner/diyalog
+```
+
 ## Quick Guide
 
 ```elm

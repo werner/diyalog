@@ -43,7 +43,7 @@ type alias Model = { style           : Animation.State
                    , fullFooter      : Html Msg
                    , visibility      : ModalVisibility }
 
-{-| -}
+{-| This is the modal itself -}
 view : Model -> Html Msg
 view model = 
     div [ modalVisibility model.visibility ]
