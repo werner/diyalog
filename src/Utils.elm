@@ -1,6 +1,7 @@
 module Utils exposing (..)
 
 import Html exposing (..)
+import Html.Attributes exposing (map)
 import Html.Events exposing (on, onClick, targetValue)
 
 import Diyalog.Message exposing (..)
@@ -17,29 +18,29 @@ modalVisibility visibility =
         HideModal ->
             modalHide
 
-setFullHeader : String -> Html Msg
-setFullHeader header = 
+setFullHeader : (Msg -> msg) -> String -> Html msg
+setFullHeader msg header = 
     div [ modalHeader ]
         [ button [ closeCss 
-                 , onClick CloseModal ] 
+                 , Html.Attributes.map msg <| onClick CloseModal ] 
                  [ text "x" ]
          , div [ modalHeaderTitle ] 
                [ text header ] 
          ]
 
-setFullBody : Html Msg -> Html Msg
+setFullBody : Html msg -> Html msg
 setFullBody body =
     div [ modalBody ]
         [ body ]
 
-setFullFooter : Html Msg
-setFullFooter = 
+setFullFooter : (Msg -> msg) -> Html msg
+setFullFooter msg = 
     div [ modalFooter ]
         [ div [ actionsGroup ]
               [ button [ footerButtonClose
-                       , onClick CloseModal ]
+                       , Html.Attributes.map msg <| onClick CloseModal ]
                        [ text "Close" ]
               , button [ footerButtonOk 
-                       , onClick OkModal ] 
+                       , Html.Attributes.map msg <| onClick OkModal ] 
                        [ text "Ok" ] ]
         ]

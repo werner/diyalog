@@ -10,7 +10,7 @@ import Random
 type Msg = DiyalogMsg Diyalog.Message.Msg
          | ChangeNumber Int
 
-type alias Model = { modal : Diyalog.Model, numberRandom : Int }
+type alias Model = { modal : Diyalog.Model Msg, numberRandom : Int }
 
 view : Model -> Html Msg
 view model = 
@@ -19,7 +19,7 @@ view model =
                     [ text "Open Modal" ]
            , p [] []
            , div [] [ text <| "Mi number:" ++ toString model.numberRandom ]
-           , Html.map DiyalogMsg ( Diyalog.view model.modal )
+           , Diyalog.view DiyalogMsg model.modal
            ]
 
 update : Msg -> Model -> ( Model, Cmd Msg)
@@ -44,7 +44,7 @@ subscriptions model =
     Sub.batch [ Sub.map DiyalogMsg ( Diyalog.subscriptions model.modal ) ]
 
 initial : Model
-initial = let initialModal = Diyalog.initial
+initial = let initialModal = Diyalog.initial DiyalogMsg
           in { modal = { initialModal | fullHeader = setFullHeader
                                       , headerTitle =  "My awesome Bootstrap modal"
                                       , mainModalCss = class "modal-dialog"
@@ -64,27 +64,27 @@ main =
       , subscriptions = subscriptions
       }
 
-setFullHeader : String -> Html Diyalog.Message.Msg
+setFullHeader : String -> Html Msg
 setFullHeader header = 
     div [ class "modal-header" ]
         [ button [ class "close"
-                 , onClick CloseModal ] 
+                 , onClick <| DiyalogMsg CloseModal ] 
                  [ text "x" ]
         , div [ class "modal-title" ] 
               [ text header ] 
         ]
 
-setFullBody : Html Diyalog.Message.Msg -> Html Diyalog.Message.Msg
+setFullBody : Html Msg -> Html Msg
 setFullBody body =
     div [ class "modal-body" ]
         [ body ]
 
-setFullFooter : Html Diyalog.Message.Msg
+setFullFooter : Html Msg
 setFullFooter = 
     div [ class "modal-footer" ]
         [ button [ class "btn btn-default"
-                 , onClick CloseModal ]
+                 , onClick <| DiyalogMsg CloseModal ]
                  [ text "Close" ]
         , button [ class "btn btn-primary" 
-                 , onClick OkModal ] 
+                 , onClick <| DiyalogMsg OkModal ] 
                  [ text "Ok" ] ]

@@ -10,7 +10,7 @@ import Random
 type Msg = DiyalogMsg Diyalog.Message.Msg
          | ChangeNumber Int
 
-type alias Model = { modal : Diyalog.Model, numberRandom : Int }
+type alias Model = { modal : Diyalog.Model Msg, numberRandom : Int }
 
 view : Model -> Html Msg
 view model = 
@@ -19,7 +19,7 @@ view model =
                     [ text "Open Modal" ]
            , p [] []
            , div [] [ text <| "Mi number:" ++ toString model.numberRandom ]
-           , Html.map DiyalogMsg ( Diyalog.view model.modal )
+           , Diyalog.view DiyalogMsg model.modal
            ]
 
 update : Msg -> Model -> ( Model, Cmd Msg)
@@ -44,9 +44,9 @@ subscriptions model =
     Sub.batch [ Sub.map DiyalogMsg ( Diyalog.subscriptions model.modal ) ]
 
 initial : Model
-initial = let initialModal = Diyalog.initial
+initial = let initialModal = Diyalog.initial DiyalogMsg
           in { modal = { initialModal | headerTitle = "My awesome Title"
-                                      , body = p [] [ text " A modal example" ] }
+                                      , body = simpleBody }
              , numberRandom = 0 }
 
 main : Program Never Model Msg
@@ -58,3 +58,6 @@ main =
       , update = update
       , subscriptions = subscriptions
       }
+
+simpleBody : Html Msg
+simpleBody = p [] [ text " A modal example" ]

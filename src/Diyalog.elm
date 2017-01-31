@@ -33,22 +33,22 @@ import Diyalog.Message exposing (..)
     The body property is the modal body, headerTitle just the title, fullHeader is the complete header with css
     fullBody is the whole body with css and the body, fullFooter should include the buttons with the actions.
     You don't need to modify visibility -}
-type alias Model = { style           : Animation.State
-                   , mainModalCss    : Attribute Msg
-                   , modalContentCss : Attribute Msg
-                   , body            : Html Msg
-                   , headerTitle     : String
-                   , fullHeader      : (String -> Html Msg)
-                   , fullBody        : (Html Msg -> Html Msg)
-                   , fullFooter      : Html Msg
-                   , visibility      : ModalVisibility }
+type alias Model msg = { style           : Animation.State
+                       , mainModalCss    : Attribute msg
+                       , modalContentCss : Attribute msg
+                       , body            : Html msg
+                       , headerTitle     : String
+                       , fullHeader      : (String -> Html msg)
+                       , fullBody        : (Html msg -> Html msg)
+                       , fullFooter      : Html msg
+                       , visibility      : ModalVisibility }
 
 {-| This is the modal itself -}
-view : Model -> Html Msg
-view model = 
+view : (Msg -> msg) -> Model msg -> Html msg
+view msg model = 
     div [ modalVisibility model.visibility ]
         [ div [ modalBackground
-              , onClick CloseModal ] []
+              , Html.Attributes.map msg <| onClick CloseModal ] []
         , div ( Animation.render model.style ++ [ model.mainModalCss
                                                 , style [("display", "block")]
                                                 , id "diyalog-modal" ])
@@ -62,7 +62,7 @@ view model =
         ]
 
 {-| -}
-update : Msg -> Model -> ( Model, Cmd Msg)
+update : Msg -> Model msg -> ( Model msg, Cmd Msg)
 update msg model =
     case msg of
         ShowingModal ->
@@ -95,20 +95,20 @@ update msg model =
                       , visibility = HideModal }, Cmd.none )
 
 {-| -}
-subscriptions : Model -> Sub Msg
+subscriptions : Model msg -> Sub Msg
 subscriptions model =
     Animation.subscription Animate [ model.style ]
 
 {-| -}
-initial : Model
-initial = { style = Animation.style
+initial : (Msg -> msg) -> Model msg
+initial msg = { style = Animation.style
                                 [ Animation.top (px -50.0)
                                 , Animation.opacity 0.0 ]
-          , body            = text ""
-          , headerTitle     = ""
-          , fullHeader      = setFullHeader
-          , fullBody        = setFullBody
-          , fullFooter      = setFullFooter
-          , modalContentCss = modalContent
-          , mainModalCss    = mainModalCss
-          , visibility      = HideModal }
+              , body            = text ""
+              , headerTitle     = ""
+              , fullHeader      = setFullHeader msg
+              , fullBody        = setFullBody
+              , fullFooter      = setFullFooter msg
+              , modalContentCss = modalContent
+              , mainModalCss    = mainModalCss
+              , visibility      = HideModal }
