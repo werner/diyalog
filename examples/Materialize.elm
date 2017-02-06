@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (on, onClick, targetValue)
 import Diyalog exposing (..)
 import Diyalog.Message exposing (..)
+import Animation
 import Random
 
 type Msg = DiyalogMsg Diyalog.Message.Msg
@@ -32,7 +33,13 @@ update msg model =
                 OkModal ->
                     let (updateModal, cmd) = Diyalog.update msgModal model.modal
                     in
-                        ( { model | modal = updateModal }, Random.generate ChangeNumber (Random.int 1 20) )
+                        ( { model | modal = { updateModal | style = Animation.style [] } }, 
+                                                    Random.generate ChangeNumber (Random.int 1 20) )
+                CloseModal ->
+                    let (updateModal, cmd) = Diyalog.update msgModal model.modal
+                    in
+                        ( { model | modal = { updateModal | style = Animation.style [] } }, Cmd.none )
+
                 _ ->
                     let (updateModal, cmd) = Diyalog.update msgModal model.modal
                     in
@@ -47,7 +54,8 @@ subscriptions model =
 
 initial : Model
 initial = let initialModal = Diyalog.initial DiyalogMsg
-          in { modal = { initialModal | fullHeader = setFullHeader
+          in { modal = { initialModal | style = Animation.style []
+                                      , fullHeader = setFullHeader
                                       , headerTitle =  "My awesome Materialize modal"
                                       , mainModalCss = class "modal"
                                       , modalContentCss = class "modal-content"
